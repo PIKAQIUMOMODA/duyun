@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--水表读数-->
+<mapper namespace="com.ningbo.duyun.dao.MeterMapper">
+    <!--设置bean类和数据库中表的字段一一对应，注意数据库字段和domain类中的字段名称不致，此处一定要！-->
+    <resultMap id="MeterMap" type="com.ningbo.duyun.bean.Meter">
+        <result column="meter_metercode" property="meterMetercode" jdbcType="VARCHAR"/>
+        <result column="meter_currentreading" property="meterCurrentreading" jdbcType="VARCHAR"/>
+        <result column="meter_pressure" property="meterPressure" jdbcType="VARCHAR"/>
+        <result column="meter_valveStatus" property="meterValveStatus" jdbcType="INTEGER"/>
+        <result column="meter_signalstrength" property="meterSignalstrength" jdbcType="INTEGER"/>
+        <result column="meter_readTime" property="meterReadTime" jdbcType="VARCHAR"/>
+        <result column="meter_readDate" property="meterReadDate" jdbcType="VARCHAR"/>
+        <result column="meter_readstatus" property="meterReadstatus" jdbcType="VARCHAR"/>
+        <result column="meter_todayconsume" property="meterTodayconsume" jdbcType="VARCHAR"/>
+        <result column="meter_batteryval" property="meterBatteryval" jdbcType="VARCHAR"/>
+        <result column="meter_importtime" property="meterImporttime" jdbcType="VARCHAR"/>
+        <result column="metet_issuccessimport" property="metetIssuccessimport" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <resultMap id="RemoteDataMap" type="com.ningbo.duyun.bean.RemoteData">
+        <result column="cardId" property="cardId" jdbcType="VARCHAR"/>
+        <result column="barCode" property="barCode" jdbcType="VARCHAR"/>
+        <result column="serialNo" property="serialNo" jdbcType="VARCHAR"/>
+        <result column="reading" property="reading" jdbcType="INTEGER"/>
+        <result column="water" property="water" jdbcType="INTEGER"/>
+        <result column="readState" property="readState" jdbcType="VARCHAR"/>
+        <result column="readDate" property="readDate" jdbcType="INTEGER"/>
+
+    </resultMap>
+
+
+    <!--插入水表数据-->
+    <insert id="insetMeterReading" parameterType="com.ningbo.duyun.bean.Meter">
+INSERT INTO meter (
+		meter_metercode,
+		meter_currentreading,
+		meter_pressure,
+		meter_valveStatus,
+		meter_signalstrength,
+		meter_readTime,
+		meter_readDate,
+		meter_readstatus,
+		meter_todayconsume,
+		meter_batteryval,
+		meter_importtime,
+		metet_issuccessimport
+	)
+VALUES
+	(
+		#{meterMetercode},
+		#{meterCurrentreading},
+		#{meterPressure},
+		#{meterValveStatus},
+		#{meterSignalstrength},
+		#{meterReadTime},
+		#{meterReadDate},
+		#{meterReadstatus},
+		#{meterTodayconsume},
+		#{meterBatteryval},
+		#{meterImporttime},
+		#{metetIssuccessimport}
+	);
+     </insert>
+
+   <!--查询水表数据-->
+ <!--   <select id="getMeterReading" resultMap="RemoteDataMap">
+
+SELECT
+	 `user`.user_customerno AS cardId,
+	 "" AS barCode,
+	 "" AS serialNo,
+	floor(tmpmeter.meter_currentreading) AS reading,
+	"" AS water,
+	"正常" AS readState,
+	 CEILING(UNIX_TIMESTAMP(tmpmeter.meter_readTime)*1000) AS readDate
+FROM
+	`user`
+INNER JOIN (
+	SELECT
+		meter.meter_metercode,
+    meter.meter_currentreading,
+    meter.meter_readTime
+	FROM
+		meter
+	INNER JOIN (
+		SELECT
+			meter_metercode,
+			max(meter_readTime) AS "meter_readTime"
+		FROM
+			meter
+		GROUP BY
+			meter_metercode
+	) AS tmp ON meter.meter_metercode = tmp.meter_metercode
+	AND meter.meter_readTime = tmp.meter_readTime
+) AS tmpmeter ON `user`.user_metercode = tmpmeter.meter_metercode
+    </select>
+-->
+
+	   <select id="getMeterReading" resultMap="RemoteDataMap">
+SELECT
+	 `user`.user_customerno AS cardId,
+	 "" AS barCode,
+	 "" AS serialNo,
+	floor(tmpmeter.meter_currentreading) AS reading,
+	"" AS water,
+	"正常" AS readState,
+	 CEILING(UNIX_TIMESTAMP(tmpmeter.meter_readTime)*1000) AS readDate,
+  tmpmeter.meter_readTime,
+  tmpmeter.meter_metercode
+FROM
+	`user`
+INNER JOIN (
+	SELECT
+		meter.meter_metercode,
+    meter.meter_currentreading,
+    meter.meter_readTime
+	FROM
+		meter
+	INNER JOIN (
+		SELECT
+			meter_metercode,
+			max(meter_readTime) AS "meter_readTime"
+		FROM
+			meter
+		GROUP BY
+			meter_metercode
+	) AS tmp ON meter.meter_metercode = tmp.meter_metercode
+	AND meter.meter_readTime = tmp.meter_readTime
+) AS tmpmeter ON `user`.user_metercode = tmpmeter.meter_metercode  where `user`.user_customerno in (
+02019011502728
+)
+    </select>
+    <!--删除水表读数-->
+    <delete id="deleteMeterReading" >
+       delete from meter
+    </delete>
+
+</mapper>

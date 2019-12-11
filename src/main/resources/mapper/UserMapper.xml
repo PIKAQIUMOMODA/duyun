@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--用户资料-->
+<mapper namespace="com.ningbo.duyun.dao.UserMapper">
+    <!--设置bean类和数据库中表的字段一一对应，注意数据库字段和domain类中的字段名称不致，此处一定要！-->
+    <resultMap id="UserMap" type="com.ningbo.duyun.bean.User">
+        <id column="user_customerid" property="userCustomerid" jdbcType="INTEGER"/>
+        <result column="user_customerno" property="userCustomerno" jdbcType="VARCHAR"/>
+        <result column="user_customername" property="userCustomername" jdbcType="VARCHAR"/>
+        <result column="user_customeraddr" property="userCustomeraddr" jdbcType="VARCHAR"/>
+        <result column="user_waterusage" property="userWaterusage" jdbcType="VARCHAR"/>
+        <result column="user_regionName" property="userReginName" jdbcType="VARCHAR"/>
+        <result column="user_metercode" property="userMetercode" jdbcType="VARCHAR"/>
+        <result column="user_metername" property="userMetername" jdbcType="VARCHAR"/>
+        <result column="user_hasvalve" property="userHasvalve" jdbcType="VARCHAR"/>
+        <result column="user_valuestatus" property="userValuestatus" jdbcType="VARCHAR"/>
+        <result column="user_status" property="userStatus" jdbcType="VARCHAR"/>
+        <result column="user_installtime" property="userInstalltime" jdbcType="VARCHAR"/>
+        <result column="user_installaddr" property="userInstalladdr" jdbcType="VARCHAR"/>
+        <result column="user_cusomerMemo" property="userCusomerMemo" jdbcType="VARCHAR"/>
+        <result column="user_mechanicalcode" property="userMechanicalcode" jdbcType="VARCHAR"/>
+        <result column="user_importtime" property="userImporttime" jdbcType="VARCHAR"/>
+        <result column="user_modifiertime" property="userModifiertime" jdbcType="VARCHAR"/>
+        <result column="user_oldecustomerno" property="userOldecustomerno" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!-- 查询单条记录 -->
+    <select id="selectUserById" parameterType="int" resultMap="UserMap">
+    </select>
+
+    <!--插入用户数据-->
+    <insert id="insertUserInfo" parameterType="com.ningbo.duyun.bean.User">
+       INSERT INTO `user` (user_customerno,user_customername,user_customeraddr,user_waterusage,user_regionName,user_metercode,user_metername,user_hasvalve,user_valuestatus,user_status,user_installtime,user_installaddr,user_cusomerMemo,user_mechanicalcode,user_importtime,user_modifiertime,user_oldecustomerno)
+       VALUES (#{userCustomerno},#{userCustomername},#{userCustomeraddr},#{userWaterusage},#{userReginName},#{userMetercode},#{userMetername},#{userHasvalve},#{userValuestatus},#{userStatus},#{userInstalltime},#{userInstalladdr},#{userCusomerMemo}, #{userMechanicalcode}, #{userImporttime},#{userModifiertime},#{userOldecustomerno})
+     </insert>
+
+    <update id="updateUserInfoByCustomerNo" parameterType="com.ningbo.duyun.bean.User">
+     UPDATE `user`
+SET user_customerno = #{userCustomerno}, user_customername=#{userCustomername}, user_customeraddr= #{userCustomeraddr}, user_waterusage=#{userWaterusage}, user_regionName=#{userReginName}, user_metercode=#{userMetercode}, user_metername=#{userMetername}, user_hasvalve=#{userHasvalve}, user_valuestatus=#{userValuestatus},user_status=#{userStatus}, user_installtime=#{userInstalltime}, user_installaddr=#{userInstalladdr}, user_cusomerMemo=#{userCusomerMemo}, user_mechanicalcode= #{userMechanicalcode}, user_importtime=#{userImporttime}, user_modifiertime=#{userModifiertime},user_oldecustomerno=#{userOldecustomerno} WHERE user_customerno = #{userCustomerno};
+    </update>
+
+    <select id="selectUserInfo" resultMap="UserMap">
+       select * from `user`
+    </select>
+
+    <select id="selectUserByCustomerNo" resultMap="UserMap" parameterType="java.lang.String">
+        select * from `user` where  user_customerno = #{userCustomerno}
+    </select>
+
+    <delete id="delteUserByCustomerId" parameterType="java.lang.Integer">
+        delete from `user` where user_customerid = #{userCustomerid}
+    </delete>
+
+</mapper>
