@@ -130,7 +130,7 @@ public  class UserAndReadingUtil {
         return waterInfo;
     }*/
 
-    public static String getWaterInfo() {
+    public static String getWaterReading(String startTime,String endTime) {
         Map<String,String> accessMap=getToken();
         String waterInfo = null;
         if(accessMap!=null&&accessMap.size()>0)

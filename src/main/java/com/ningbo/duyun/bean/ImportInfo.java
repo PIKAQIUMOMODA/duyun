@@ -8,14 +8,14 @@ import java.util.Date;
 
 @Data
 public class ImportInfo implements Serializable {
-    private char isSuccess;
-    private char isUpload;
+    private String isSuccess;
+    private String isUpload;
     private int userCustomerid;
     private int meterMeterid;
     private String meterMetercode;
-    private double meterCurrentreading;
-    private double meterUpdatereading;
-    private double meterPriorreading;
+    private String meterCurrentreading;
+    private String meterUpdatereading;
+    private String meterPriorreading;
     private String meterReadTime;
     private Date createTime;
     private String reason;

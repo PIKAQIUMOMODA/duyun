@@ -34,12 +34,12 @@ public class MeterService {
     ImportInfoService importInfoService;
 
     /**
-     * 从远程数据库获取数据
+     * 插入远程数据库读数信息
      * @return
      */
-    public boolean getMeterReading()
+    public boolean insertMeterReading(String startTime,String endTime)
     {
-        String meterReadingString=UserAndReadingUtil.getWaterInfo();
+        String meterReadingString=UserAndReadingUtil.getWaterReading(startTime,endTime);
         if(meterReadingString==null||"".equals(meterReadingString)) {
             logger.info("获取水表读数失败");
             return false;
@@ -91,10 +91,10 @@ public class MeterService {
     }
 
     /***
-     * 从本地获取每只表的数据。
+     * 从中间库获取待传数据。
      * @return
      */
-    private List<RemoteData> getRemoteData()
+    private List<RemoteData> getTransferData()
     {
         return meterMapper.getMeterReading();
     }
@@ -111,7 +111,7 @@ public class MeterService {
 
         String duyunUrl="http://47.92.204.93:8001/api/v1/remoteMeter/reading";
         //从中间库提取数据
-        List<RemoteData> remoteDataList=getRemoteData();
+        List<RemoteData> remoteDataList=getTransferData();
         if(remoteDataList!=null&&remoteDataList.size()>0)
         {
             RemoteRecord remoteRecord=new RemoteRecord();
@@ -239,7 +239,7 @@ public class MeterService {
 
 
     /**
-     * 插入读数信息
+     * 插入错误信息到数据库
      * @param faildItemList
      * @return
      */
@@ -261,7 +261,7 @@ public class MeterService {
                 }break;
                 default:
                 {
-                   type=3;
+                    type=3;
                 }
                 break;
 
@@ -270,17 +270,14 @@ public class MeterService {
             ImportInfo importInfoType = new ImportInfo();
             for (int i = 0; i < n; i++) {
                 FaildItem faildItem = faildItemList.get(i);
-                importInfoType .setIsSuccess('0');//默认失败
-                importInfoType .setIsUpload('0');//默认失败
+                importInfoType .setIsSuccess("0");//默认失败
+                importInfoType .setIsUpload("0");//默认失败
                 importInfoType .setType(type);//type值为
                 importInfoType .setUserCustomerno(faildItem.getCardId());//用户编号
                 importInfoType .setReason(faildItem.getErrorCode());//设置错误代码
                 importInfoType .setCreateTime(new Date());
                 importInfoType .setMeterReadTime(faildItem.getReadDate().split("T")[0]);
-
                 importInfoService.insertImportInfo(importInfoType);
-
-
             }
 
            return n;

@@ -1,0 +1,132 @@
+-- 基础用户表user
+-- 字段 
+user_customerid 客户id  自增长
+user_customerno 客户编码
+user_customername 客户名称
+user_customeraddr 客户安装地址
+user_waterusage 用水性质
+user_regionName 小区名称
+user_metercode 水表编码，设备唯一标识。
+user_metername 水表名称
+user_hasvalve 是否带阀门
+user_valuestatus 阀门状态。0：开阀；1: 关阀；2：阀门异常；-1：不带阀门
+user_status 水表状态。1：正常；2：停用
+user_installtime 安装时间。时间格式：yyyy-MM-dd HH:mm:ss如：2017-07-11 12:00:00
+user_installaddr 安装地址
+user_cusomerMemo 备注
+user_mechanicalcode 机械表号
+user_importtime 导入时间
+user_modifiertime 修改时间
+user_oldecustomerno 旧用户编号
+
+-- 基础数据表 水表数据表meter
+meter_meterid  自增长
+meter_metercode 水表编码，设备唯一编号
+meter_currentreading 抄表读数（单位：立方米）
+meter_pressure 压力值（单位：kPa）
+meter_valveStatus 阀门状态（0：关阀，1：开阀，2：阀门故障，-1：不带阀门）
+meter_signalstrength 信号强度（单位：db）
+meter_readTime 数据采集时间。时间格式：yyyy-MM-dd HH:mm:ss如：2017-07-11 12:00:00
+meter_readDate 采集日期 时间格式:yyyy-MM-dd
+meter_readstatus 抄读状态。1：正常；2：异常
+meter_todayconsume 今日用水量
+meter_batteryval 电池电压
+meter_importtime 导入时间
+metet_issuccessimport 是否导入 0否,1是 
+
+-- 日志表 log
+log_id 日志id 自增长
+log_type 日志类别 类别 0 发送日志， 1 响应日志
+log_content 日志内容  
+log_createtime 创建时间
+
+-- 导入水表信息是否成功数据 improtmeterinfo
+rp_id  相应id
+rp_issuccess 是否上传成功 0 失败 ,1 成功
+rp_isupload 是否是重传标志 0 不是,1 是
+rp_user_customerid  
+rp_meter_meterid 水表id
+rp_meter_metercode 水表编号
+rp_meter_currentreading 抄表读数（单位：立方米）
+rp_meter_updatereading 更新读数 (单位：立方米)
+rp_meter_priorreading 上期数据
+rp_meter_readTime 数据采集时间
+rp_createtime 创建时间
+rp_reason 失败原因 
+
+/*异常之后的处理reason
+本期偏小，读数差1的话传上次的。
+rs_id
+rs_reason
+*/
+create database if not exists dygs default charset utf8 collate utf8_general_ci;
+use dygs;
+-- 创建user表
+create table  if not exists `user`
+ (
+user_customerid int primary key  auto_increment comment '客户id-自增长',
+user_customerno VARCHAR(20) not NULL comment  '客户编码',
+user_customername VARCHAR(100)  comment '客户名称',
+user_customeraddr VARCHAR(100)  comment '客户安装地址',
+user_waterusage char(10)  comment '用水性质',
+user_regionName varchar(20) comment '小区名称',
+user_metercode  VARCHAR(20) not null comment '水表编码,设备唯一标识',
+user_metername varchar(50) comment '水表名称',
+user_hasvalve char(2) comment '是否带阀门 0,1',
+user_valuestatus char(2) comment '阀门状态。0：开阀；1: 关阀；2：阀门异常；-1：不带阀门' ,
+user_status char(2) comment '水表状态。1：正常；2：停用',
+user_installtime  varchar(20) comment '安装时间。时间格式：yyyy-MM-dd HH:mm:ss如：2017-07-11 12:00:00',
+user_installaddr  varchar(100) COMMENT '安装地址',
+user_cutomerMemo varchar(20)comment '备注',
+user_mechanicalcode varchar(20)  comment '机械表号',
+user_importtime varchar(20) comment '导入时间',
+user_modifiertime varchar(20) comment '修改时间',
+user_oldecustomerno varchar(20) comment '旧用户编号'
+
+)ENGINE=INNODB default charset=utf8;
+create table `user` add unique userno_unique(user_customerno);
+
+create table if not exists meter(
+meter_meterid  INT primary key auto_increment COMMENT '自增长',
+meter_metercode VARCHAR(20) comment '水表编码，设备唯一编号',
+meter_currentreading varchar(10) comment  '抄表读数(单位：立方米)',
+meter_pressure varchar(10) comment '压力值（单位：kPa）',
+meter_valveStatus varchar(2) COMMENT '阀门状态（0：关阀，1：开阀，2：阀门故障，-1：不带阀门）',
+meter_signalstrength  varchar(10) COMMENT '信号强度（单位：db）',
+meter_readTime varchar(20) COMMENT '数据采集时间。时间格式：yyyy-MM-dd HH:mm:ss如：2017-07-11 12:00:00',
+meter_readDate datetime COMMENT '采集日期 时间格式:yyyy-MM-dd',
+meter_readstatus varchar(2) comment '抄读状态。1：正常；2：异常',
+meter_todayconsume varchar(12) COMMENT '今日用水量',
+meter_batteryval varchar(5) COMMENT '电池电压',
+meter_importtime datetime comment '导入时间',
+metet_issuccessimport  int(2)  comment '是否导入 0否,1是' 
+)ENGINE=INNODB default charset=utf8;
+
+create table if not exists `log` (
+log_id BIGINT  PRIMARY key auto_increment  COMMENT '日志id 自增长',
+log_type char(1) COMMENT '日志类别 类别 0 发送日志， 1 响应日志',
+log_content varchar(255) comment '日志内容' ,
+log_createtime datetime comment '创建时间'
+)engine=INNODB default charset=utf8;
+
+create table if not exists improtmeterinfo
+(
+rp_id  int(11) PRIMARY key auto_increment COMMENT '相应id',
+rp_issuccess varchar(2) COMMENT '是否上传成功 0 失败 ,1 成功',
+rp_isupload  varchar(2) COMMENT '是否是重传标志 0 不是,1 是',
+rp_user_customerid  int(11)  COMMENT '客户id',
+rp_meter_meterid int(11) comment '水表id',
+rp_meter_metercode varchar(20) comment '水表编号',
+rp_meter_currentreading varchar(10) COMMENT '抄表读数（单位：立方米）',
+rp_meter_updatereading varchar(10) COMMENT '更新读数 (单位：立方米)',
+rp_meter_priorreading varchar(10) COMMENT '上期数据',
+rp_meter_readTime varchar(20) COMMENT '数据采集时间',
+rp_createtime datetime comment '创建时间',
+rp_reason  varchar(255) COMMENT '失败原因' 
+rp_user_customerno varchar(20) comment '用户编码',
+rp_type int(2) comment '错误类型'
+)engine=INNODB default charset=utf8;
+
+
+-- Expression #1 of ORDER BY clause is not in GROUP BY clause and contains nonaggregated column 'information_schema.PROFILING.SEQ' which is not -- functionally dependent on columns in GROUP BY clause; this is incompatible with sql_mode=only_full_group_by
+
