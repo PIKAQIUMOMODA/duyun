@@ -1,0 +1,81 @@
+ <!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>综合抄表平台</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link rel="shortcut icon" href="favicon.ico">
+    <link href="../lib/hplus/css/bootstrap.min14ed.css?v=3.3.6" rel="stylesheet">
+    <link href="../lib/hplus/css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet">
+    <link href="../lib/hplus/css/animate.min.css" rel="stylesheet">
+    <link href="../lib/hplus/css/style.min862f.css?v=4.1.0" rel="stylesheet">
+    <link href="../lib/hplus/css/login.min.css" rel="stylesheet">
+
+</head>
+<body class="signin">
+
+
+<div class="signinpanel">
+    <div class="row">
+        <div class="col-sm-7">
+            <div class="signin-info">
+                <div class="logopanel m-b">
+                    <h1>宁波水表股份有限公司</h1>
+                </div>
+                <div class="m-b"></div>
+                <h4>欢迎使用 <strong >综合抄表平台</strong></h4>
+
+                <!--<strong>还没有账号？ <a href="#">立即注册&raquo;</a></strong>-->
+            </div>
+        </div>
+<div class="col-sm-5">
+    <!--<button id="adduser" class="btn btn-lg btn-primary btn-block" type="button">上传用户</button>-->
+    <!--<div id="loading1" style="display: none;margin-top: 25px"><img  src="lib/11.gif" height="15" width="295"/><p style="text-align: center">正在上传，请稍等</p></div>-->
+    <button id="loginBtn" class="btn btn-lg btn-primary btn-block" type="button">上传表读数</button>
+
+    <div id="loading" style="display: none;margin-top: 35px"><img  src="lib/11.gif" height="15" width="295"/><p style="text-align: center">正在上传，请稍等</p></div>
+
+</div>
+    </div>
+    <!--<div id="jqmeter-container"></div>-->
+    <div class="signup-footer">
+        <div class="pull-left">
+            &copy; 2015-2017 杭州云润科技有限公司
+        </div>
+    </div>
+</div>
+
+
+
+
+<script src="../lib/common-js.js"></script>
+<script type="text/javascript" src="http://tajs.qq.com/stats?sId=9051096" charset="UTF-8"></script>
+<script>
+    $("#loginBtn").click(function(){
+
+       // alert("开始上传,大概等待15分钟");
+        $("#loginBtn").hide();
+
+        $("#loading").show();
+
+
+        $.get("/yongzhou/upload",function(data){
+
+        if(data.num>=0){
+            $("#loading").hide();
+            $("#loginBtn").show();
+            alert("上传成功，共上传"+data.num+"条读数");
+
+        }else{
+            alert("上传失败");
+        }
+        });
+    });
+
+    
+</script>
+
+</body>
+</html>
