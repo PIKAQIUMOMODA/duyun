@@ -12,6 +12,7 @@
     <link href="../lib/hplus/css/animate.min.css" rel="stylesheet">
     <link href="../lib/hplus/css/style.min862f.css?v=4.1.0" rel="stylesheet">
     <link href="../lib/hplus/css/login.min.css" rel="stylesheet">
+    <link href="../lib/hplus/css/laydate.css" rel="stylesheet">
 
 </head>
 <body class="signin">
@@ -38,9 +39,9 @@
             <!--时间选择框-->
             <div>
                 <label>开始时间:</label>
-                <input type="text" id="startTime" name="datetimepicker" value="" placeholder="开始时间" class="form-control">
+                <input type="text" id="startTime" name="layui-input"  placeholder="开始时间" class="form-control" style="color: black">
                 <label>结束时间:</label>
-                <input type="text" id="endTime" name="datetimepicker" value="" placeholder="结束时间" class="form-control">
+                <input type="text" id="endTime" name="layui-input"  placeholder="结束时间" class="form-control"  style="color: black">
             </div>
             <button id="insertWaterReadingBtn" class="btn btn-lg btn-success btn-block" type="button">插入中间库数据</button>
 
@@ -61,34 +62,115 @@
 
 
 <script src="../lib/common-js.js"></script>
+<script src="../lib/hplus/js/laydate.js"></script>
 <script type="text/javascript" src="http://tajs.qq.com/stats?sId=9051096" charset="UTF-8"></script>
 <script>
     /**
      * 上传用户数据
      */
     $("#uploadUserBtn").click(function(){
-
        // alert("开始上传,大概等待15分钟");
-        $("#loginBtn").hide();
-
+        $("#uploadUserBtn").hide();
         $("#loading").show();
+        $.get("/updateUser",function(data,status) {
+                debugger
+            if (status =="success")
+            {
+                if (data.result==1) {
 
+                    $("#loading").hide();
+                    $("#uploadUserBtn").show();
+                    alert("插入用户成功!使用"+data.useTime+"分钟");
 
-        $.get("/updateUser",function(data){
-
-        if(data.result){
-            $("#loading").hide();
-            $("#loginBtn").show();
-            alert("插入用户成功");
-            var mode=[[${result}}]]
-
-        }else{
-            alert("插入用户失败");
+                } else {
+                    alert("插入用户失败！使用"+data.useTime+"分钟");
+                    $("#loading").hide();
+                    $("#uploadUserBtn").show();
+                }
+            }
+            else
+            {
+                alert("请求异常")
+            }
         }
-        });
+        )
+            ;
+    });
+    /**
+     * 时间控件
+     */
+    var $startTime=$("#startTime");
+    var $endTime=$("#endTime");
+    laydate.render({
+        elem: '#startTime', //指定元素
+        type:'date',
+        format:'yyyy-MM-dd',
+        value:new Date(),
+        theme:'grid',
+        done:function (value,date,endDate) {
+            if($endTime.val()<$startTime.val())
+            {
+                alert("开始日期必须小于或等于结束日期");
+                $startTime.val($endTime.val()).css("color","red");
+                return;
+            }
+
+            $startTime.val(value).css("color","red");
+        },
+
+    });
+    laydate.render({
+        elem: '#endTime', //指定元素
+        type:'date',
+        format:'yyyy-MM-dd',
+        value:new Date(),
+        theme:'grid',
+        done:function (value,date,endDate) {
+            if($endTime.val()<$startTime.val())
+            {
+                alert("结束日期必须大于或等于开始日期");
+                $endTime.val($startTime.val());
+                return;
+            }
+
+            $endTime.val(value).css("color","red");
+        },
     });
 
-    
+    /**
+     * 插入中间库调用
+     */
+
+    $("#insertWaterReadingBtn").click(function(){
+        $("#insertWaterReadingBtn").hide();
+        $("#loading").show();
+        var data1={"startTime":$startTime.val(),"endTime":$endTime.val()};
+
+        $.get("/getReadingData",data1,function(data,status) {
+                if (status =="success")
+                {
+                    debugger
+                    if (data.result==1) {
+
+                        $("#loading").hide();
+                        $("#insertWaterReadingBtn").show();
+                        alert("插入用户成功!使用"+"分钟");
+
+                    } else {
+                        alert("插入用户失败！使用"+"分钟");
+                        $("#loading").hide();
+                        $("#insertWaterReadingBtn").show();
+                    }
+                }
+                else
+                {
+                    alert("请求异常")
+                }
+            }
+        ,"json")
+        ;
+    });
+
 </script>
 
 </body>

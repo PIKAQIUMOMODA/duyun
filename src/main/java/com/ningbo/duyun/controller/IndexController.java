@@ -11,16 +11,14 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,10 +51,16 @@ public class IndexController {
      * @return
      */
     @GetMapping("/updateUser")
-    public void updateUser(Model model) {
-      //  userService.addUserInfo();
-        boolean result = true;
-        model.addAttribute("result", result);
+    @ResponseBody
+    public Map<String,String> updateUser() {
+        long startTime=System.currentTimeMillis();//毫秒
+      int result=1;  //userService.addUserInfo()?1:0;
+        long endTime=System.currentTimeMillis();//毫秒
+        long useTime=(60000000)/(60*1000);//分钟
+        Map<String,String > map= new HashMap<String,String>();
+        map.put("result",Integer.toString(result));
+        map.put("useTime",Long.toString(useTime));
+        return map;
 
     }
 
@@ -83,19 +87,28 @@ public class IndexController {
 
     /**
      * 根据时间插入读数到中间库
-     * @param model
-     * @param request
-     * @param response
+     * @param startTime
+     * @param endTime
      * @return
      * @throws IOException
      */
     @GetMapping("/getReadingData")
-    public Model getReadingData(Model model,HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String startTime = request.getAttribute("startTime").toString();
-        String endTime = request.getAttribute("endTime").toString();
-        boolean result = meterService.insertMeterReading(startTime, endTime);
-        model.addAttribute("result", result);
-        return model;
+    @ResponseBody
+    public String getReadingData(String startTime,String endTime) throws IOException {
+         System.out.println(startTime);
+         System.out.println(endTime);
+         long start=1;
+         long end=1;
+         Map<String ,String> map=new HashMap<>();
+        if(start<=end)
+        {
+            map.put("result","1");
+        }
+        else
+        {
+            map.put("result","0");
+        }
+        return map.toString();
     }
 
     @GetMapping("index")
