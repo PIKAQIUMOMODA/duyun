@@ -9,8 +9,11 @@ import com.ningbo.duyun.service.UserService;
 import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 
@@ -23,7 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 
-@RestController
+@Controller
 public class IndexController {
 
     /**
@@ -50,10 +53,11 @@ public class IndexController {
      * @return
      */
     @GetMapping("/updateUser")
-    public Model updateUser(Model model) {
-        boolean result = userService.addUserInfo();
-        model.addAttribute("上传用户", result);
-        return model;
+    public void updateUser(Model model) {
+      //  userService.addUserInfo();
+        boolean result = true;
+        model.addAttribute("result", result);
+
     }
 
 
@@ -71,7 +75,7 @@ public class IndexController {
     }
 
 
-    @GetMapping("getLog/${type}")
+    @GetMapping("getLog/{type}")
     public int getLog(@Param("type")int type) {
         List<Log> logs = logService.selectByType(type);
         return logs.size();
@@ -92,6 +96,12 @@ public class IndexController {
         boolean result = meterService.insertMeterReading(startTime, endTime);
         model.addAttribute("result", result);
         return model;
+    }
+
+    @GetMapping("index")
+    public String index()
+    {
+        return "index.html";
     }
 
 

@@ -55,10 +55,10 @@
             // as the user clicks on the start buttons. To enable automatic
             // uploads, set the following option to true:
             autoUpload: false,
-            // The ID of the upload template:
-            uploadTemplateId: 'template-upload',
-            // The ID of the download template:
-            downloadTemplateId: 'template-download',
+            // The ID of the upload templates:
+            uploadTemplateId: 'templates-upload',
+            // The ID of the download templates:
+            downloadTemplateId: 'templates-download',
             // The container for the list of files. If undefined, it is set to
             // an element with class "files" inside of the widget element:
             filesContainer: undefined,
@@ -515,7 +515,7 @@
         _startHandler: function (e) {
             e.preventDefault();
             var button = $(e.currentTarget),
-                template = button.closest('.template-upload'),
+                template = button.closest('.templates-upload'),
                 data = template.data('data');
             button.prop('disabled', true);
             if (data && data.submit) {
@@ -526,7 +526,7 @@
         _cancelHandler: function (e) {
             e.preventDefault();
             var template = $(e.currentTarget)
-                    .closest('.template-upload,.template-download'),
+                    .closest('.templates-upload,.templates-download'),
                 data = template.data('data') || {};
             data.context = data.context || template;
             if (data.abort) {
@@ -541,7 +541,7 @@
             e.preventDefault();
             var button = $(e.currentTarget);
             this._trigger('destroy', e, $.extend({
-                context: button.closest('.template-download'),
+                context: button.closest('.templates-download'),
                 type: 'DELETE'
             }, button.data()));
         },
@@ -591,7 +591,7 @@
                 click: function (e) {
                     e.preventDefault();
                     filesList.find('.toggle:checked')
-                        .closest('.template-download')
+                        .closest('.templates-download')
                         .find('.delete').click();
                     fileUploadButtonBar.find('.toggle')
                         .prop('checked', false);

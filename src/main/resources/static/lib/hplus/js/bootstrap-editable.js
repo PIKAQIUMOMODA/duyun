@@ -56,7 +56,7 @@
             this.$loading = $($.fn.editableform.loading);
             this.$div.empty().append(this.$loading);
 
-            //init form template and buttons
+            //init form templates and buttons
             this.initTemplate();
             if(this.options.showbuttons) {
                 this.initButtons();
@@ -2498,7 +2498,7 @@
 
     AbstractInput.defaults = {
         /**
-         HTML template of input. Normally you should not change it.
+         HTML templates of input. Normally you should not change it.
 
          @property tpl
          @type string
@@ -4015,7 +4015,7 @@
         },
 
         /*
-         Replace tokens in template with <select> elements 
+         Replace tokens in templates with <select> elements
          */
         getTemplate: function() {
             var tpl = this.options.template;
@@ -4044,7 +4044,7 @@
         },
 
         /*
-         Initialize combos that presents in template 
+         Initialize combos that presents in templates
          */
         initCombos: function() {
             for (var k in this.map) {
@@ -4455,7 +4455,7 @@
     $('#dob').editable({
         format: 'YYYY-MM-DD',    
         viewformat: 'DD.MM.YYYY',    
-        template: 'D / MMMM / YYYY',    
+        templates: 'D / MMMM / YYYY',
         combodate: {
                 minYear: 2000,
                 maxYear: 2015,
@@ -4714,7 +4714,7 @@
                 template: this.defaults.template
             });
 
-            //as template property is used in inputs, hide it from popover
+            //as templates property is used in inputs, hide it from popover
             var t;
             if(this.$element.data('template')) {
                 t = this.$element.data('template');
@@ -4724,7 +4724,7 @@
             this.call(this.containerOptions);
 
             if(t) {
-                //restore data('template')
+                //restore data('templates')
                 this.$element.data('template', t);
             }
         },

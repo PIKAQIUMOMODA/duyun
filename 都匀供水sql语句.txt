@@ -77,7 +77,7 @@ user_valuestatus char(2) comment '·§ÃÅ×´Ì¬¡£0£º¿ª·§£»1: ¹Ø·§£»2£º·§ÃÅÒì³££»-1£º²
 user_status char(2) comment 'Ë®±í×´Ì¬¡£1£ºÕı³££»2£ºÍ£ÓÃ',
 user_installtime  varchar(20) comment '°²×°Ê±¼ä¡£Ê±¼ä¸ñÊ½£ºyyyy-MM-dd HH:mm:ssÈç£º2017-07-11 12:00:00',
 user_installaddr  varchar(100) COMMENT '°²×°µØÖ·',
-user_cutomerMemo varchar(20)comment '±¸×¢',
+user_cuomerMemo varchar(20) comment '±¸×¢',
 user_mechanicalcode varchar(20)  comment '»úĞµ±íºÅ',
 user_importtime varchar(20) comment 'µ¼ÈëÊ±¼ä',
 user_modifiertime varchar(20) comment 'ĞŞ¸ÄÊ±¼ä',

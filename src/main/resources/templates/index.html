@@ -1,5 +1,5 @@
  <!DOCTYPE html>
-<html>
+<html xmlns:th="www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
@@ -25,17 +25,27 @@
                     <h1>宁波水表股份有限公司</h1>
                 </div>
                 <div class="m-b"></div>
-                <h4>欢迎使用 <strong >综合抄表平台</strong></h4>
+                <h4>欢迎使用 <strong>综合抄表平台</strong></h4>
 
                 <!--<strong>还没有账号？ <a href="#">立即注册&raquo;</a></strong>-->
             </div>
         </div>
-<div class="col-sm-5">
-    <!--<button id="adduser" class="btn btn-lg btn-primary btn-block" type="button">上传用户</button>-->
-    <!--<div id="loading1" style="display: none;margin-top: 25px"><img  src="lib/11.gif" height="15" width="295"/><p style="text-align: center">正在上传，请稍等</p></div>-->
-    <button id="loginBtn" class="btn btn-lg btn-primary btn-block" type="button">上传表读数</button>
+        <div class="col-sm-5">
+            <!--<button id="adduser" class="btn btn-lg btn-primary btn-block" type="button">上传用户</button>-->
+            <!--<div id="loading1" style="display: none;margin-top: 25px"><img  src="lib/11.gif" height="15" width="295"/><p style="text-align: center">正在上传，请稍等</p></div>-->
+            <button id="uploadUserBtn" class="btn btn-lg btn-success btn-block" type="button">上传用户资料</button>
+            <button id="uploadWaterReadingBtn" class="btn btn-lg btn-success btn-block" type="button">上传读数</button>
+            <!--时间选择框-->
+            <div>
+                <label>开始时间:</label>
+                <input type="text" id="startTime" name="datetimepicker" value="" placeholder="开始时间" class="form-control">
+                <label>结束时间:</label>
+                <input type="text" id="endTime" name="datetimepicker" value="" placeholder="结束时间" class="form-control">
+            </div>
+            <button id="insertWaterReadingBtn" class="btn btn-lg btn-success btn-block" type="button">插入中间库数据</button>
 
-    <div id="loading" style="display: none;margin-top: 35px"><img  src="lib/11.gif" height="15" width="295"/><p style="text-align: center">正在上传，请稍等</p></div>
+            <div id="loading" style="display: none;margin-top: 35px"><img src="lib/11.gif" height="15" width="295"/>
+                <p style="text-align: center">正在上传，请稍等</p></div>
 
 </div>
     </div>
@@ -53,7 +63,10 @@
 <script src="../lib/common-js.js"></script>
 <script type="text/javascript" src="http://tajs.qq.com/stats?sId=9051096" charset="UTF-8"></script>
 <script>
-    $("#loginBtn").click(function(){
+    /**
+     * 上传用户数据
+     */
+    $("#uploadUserBtn").click(function(){
 
        // alert("开始上传,大概等待15分钟");
         $("#loginBtn").hide();
@@ -61,15 +74,16 @@
         $("#loading").show();
 
 
-        $.get("/yongzhou/upload",function(data){
+        $.get("/updateUser",function(data){
 
-        if(data.num>=0){
+        if(data.result){
             $("#loading").hide();
             $("#loginBtn").show();
-            alert("上传成功，共上传"+data.num+"条读数");
+            alert("插入用户成功");
+            var mode=[[${result}}]]
 
         }else{
-            alert("上传失败");
+            alert("插入用户失败");
         }
         });
     });
