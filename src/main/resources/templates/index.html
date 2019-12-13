@@ -44,6 +44,7 @@
                 <input type="text" id="endTime" name="layui-input"  placeholder="结束时间" class="form-control"  style="color: black">
             </div>
             <button id="insertWaterReadingBtn" class="btn btn-lg btn-success btn-block" type="button">插入中间库数据</button>
+          <!--  <button id>获取本期小于上期读数加一再传</button>-->
 
             <div id="loading" style="display: none;margin-top: 35px"><img src="lib/11.gif" height="15" width="295"/>
                 <p style="text-align: center">正在上传，请稍等</p></div>
@@ -65,25 +66,31 @@
 <script src="../lib/hplus/js/laydate.js"></script>
 <script type="text/javascript" src="http://tajs.qq.com/stats?sId=9051096" charset="UTF-8"></script>
 <script>
+
+   //全局标识，上传用户信息时，其他按钮失效
+     var userFlag=false;
+
     /**
      * 上传用户数据
      */
     $("#uploadUserBtn").click(function(){
        // alert("开始上传,大概等待15分钟");
+        userFlag=true;
         $("#uploadUserBtn").hide();
         $("#loading").show();
         $.get("/updateUser",function(data,status) {
-                debugger
-            if (status =="success")
-            {
-                if (data.result==1) {
+
+            if (status =="success") {
+                if (data.result == 2) {
+                    alert("时间不能为空");
+                } else if (data.result == 1) {
 
                     $("#loading").hide();
                     $("#uploadUserBtn").show();
-                    alert("插入用户成功!使用"+data.useTime+"分钟");
+                    alert("插入用户成功!使用" + data.useTime + "分钟");
 
                 } else {
-                    alert("插入用户失败！使用"+data.useTime+"分钟");
+                    alert("插入用户失败！使用" + data.useTime + "分钟");
                     $("#loading").hide();
                     $("#uploadUserBtn").show();
                 }
@@ -92,6 +99,8 @@
             {
                 alert("请求异常")
             }
+
+                userFlag=false;
         }
         )
             ;
@@ -108,6 +117,14 @@
         value:new Date(),
         theme:'grid',
         done:function (value,date,endDate) {
+            var time=new Date().getTime();
+            var startTime=new Date(value).getTime();
+            if(startTime>time)
+            {
+                alert("开始时间必须小于或等于当前日期");
+                $startTime.val(null);
+                return;
+            }
             if($endTime.val()<$startTime.val())
             {
                 alert("开始日期必须小于或等于结束日期");
@@ -126,6 +143,14 @@
         value:new Date(),
         theme:'grid',
         done:function (value,date,endDate) {
+            var time=new Date().getTime();
+            var endTime=new Date(value).getTime();
+            if(endTime>time)
+            {
+                alert("结束时间必须小于当前日期");
+                $endTime.val(null);
+                return;
+            }
             if($endTime.val()<$startTime.val())
             {
                 alert("结束日期必须大于或等于开始日期");
@@ -142,34 +167,76 @@
      */
 
     $("#insertWaterReadingBtn").click(function(){
-        $("#insertWaterReadingBtn").hide();
-        $("#loading").show();
-        var data1={"startTime":$startTime.val(),"endTime":$endTime.val()};
+        if(!userFlag)
+        {
+            $("#insertWaterReadingBtn").hide();
+            $("#loading").show();
+            var data1={"startTime":$startTime.val(),"endTime":$endTime.val()};
 
-        $.get("/getReadingData",data1,function(data,status) {
-                if (status =="success")
-                {
-                    debugger
-                    if (data.result==1) {
+            $.get("/getReadingData",data1,function(data,status) {
 
-                        $("#loading").hide();
-                        $("#insertWaterReadingBtn").show();
-                        alert("插入用户成功!使用"+"分钟");
+                    if (status =="success")
+                    {
+                        if (data.result == 2) {
+                            $("#loading").hide();
+                            $("#insertWaterReadingBtn").show();
+                            alert("开始或结束时间不能为空！");
+                        } else if(data.result==3)
+                        {
+                            $("#loading").hide();
+                            $("#insertWaterReadingBtn").show();
+                            alert("服务器内部错误！");
+                        }
+                          else  if (data.result == 1) {
 
-                    } else {
-                        alert("插入用户失败！使用"+"分钟");
-                        $("#loading").hide();
-                        $("#insertWaterReadingBtn").show();
+                            $("#loading").hide();
+                            $("#insertWaterReadingBtn").show();
+                            alert("插入用户成功!使用" + data.useTime+"分钟");
+
+                        } else {
+                            alert("插入用户失败！使用" + data.useTime+"分钟");
+                            $("#loading").hide();
+                            $("#insertWaterReadingBtn").show();
+                        }
+                    }
+                    else
+                    {
+                        alert("请求异常")
                     }
                 }
-                else
-                {
-                    alert("请求异常")
-                }
-            }
-        ,"json")
-        ;
+                ,"json")
+            ;
+
+
+        }
+        else
+        {
+            alert("正在上传用户，请乎操作！");
+        }
+
     });
+
+    $("#uploadWaterReadingBtn").click(function () {
+        if(!userFlag)
+        {
+           $.ajax({url:"/uploadReading",success:function (data,status) {
+                   if (status =="success")
+                   {
+                       alert("成功！");
+                   }
+                   else
+                   {
+                       alert("请求异常")
+                   }
+               }
+           });
+        }
+        else
+        {
+            alert("正在上传用户，请乎操作！");
+        }
+
+    })
 
 </script>
 

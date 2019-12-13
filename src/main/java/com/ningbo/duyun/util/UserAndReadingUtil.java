@@ -22,25 +22,25 @@ public  class UserAndReadingUtil {
 
 
     private static String  companyCode;
-    private static String startTime;
-    private static String endTime;
+  //  private static String startTime;
+  //  private static String endTime;
 
     @Value("${duyun.companyCode}")
     private void setCompanyCode(String companyCode) {
        this.companyCode=companyCode;
     }
 
-    @Value("${duyun.startTime}")
-    private void setStartTime(String startTime)
-    {
-        this.startTime=startTime;
-    }
-
-    @Value("${duyun.endTime}")
-    private void setEndTime(String endTime)
-    {
-        this.endTime=endTime;
-    }
+//    @Value("${duyun.startTime}")
+//    private void setStartTime(String startTime)
+//    {
+//        this.startTime=startTime;
+//    }
+//
+//    @Value("${duyun.endTime}")
+//    private void setEndTime(String endTime)
+//    {
+//        this.endTime=endTime;
+//    }
 
     /**
      * 获取鉴权数据

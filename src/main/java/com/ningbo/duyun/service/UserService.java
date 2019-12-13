@@ -263,7 +263,7 @@ public class UserService {
                         user.setUserModifiertime(simpleDateFormat.format(calendar.getTime()));//修改时间
 
                         if (this.updateUserInfoByCustomerNo(user) > 0) {
-                            logger.info("更新成功" + (++num) + "条");
+                            logger.info("更新成功第" + (++num) + "用户,用户编号:"+user.getUserCustomerno()+",水表编号:"+user.getUserMetercode()+",阀门状态:"+user.getUserValuestatus());
                         }
                     }
                 } catch (Exception e) {

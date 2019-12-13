@@ -37,7 +37,7 @@
 
     <update id="updateUserInfoByCustomerNo" parameterType="com.ningbo.duyun.bean.User">
      UPDATE `user`
-SET user_customerno = #{userCustomerno}, user_customername=#{userCustomername}, user_customeraddr= #{userCustomeraddr}, user_waterusage=#{userWaterusage}, user_regionName=#{userReginName}, user_metercode=#{userMetercode}, user_metername=#{userMetername}, user_hasvalve=#{userHasvalve}, user_valuestatus=#{userValuestatus},user_status=#{userStatus}, user_installtime=#{userInstalltime}, user_installaddr=#{userInstalladdr}, user_cusomerMemo=#{userCusomerMemo}, user_mechanicalcode= #{userMechanicalcode}, user_importtime=#{userImporttime}, user_modifiertime=#{userModifiertime},user_oldecustomerno=#{userOldecustomerno} WHERE user_customerno = #{userCustomerno};
+SET user_customerno = #{userCustomerno}, user_customername=#{userCustomername}, user_customeraddr= #{userCustomeraddr}, user_waterusage=#{userWaterusage}, user_regionName=#{userReginName}, user_metercode=#{userMetercode}, user_metername=#{userMetername}, user_hasvalve=#{userHasvalve}, user_valuestatus=#{userValuestatus},user_status=#{userStatus}, user_installtime=#{userInstalltime}, user_installaddr=#{userInstalladdr}, user_cusomerMemo=#{userCusomerMemo}, user_mechanicalcode= #{userMechanicalcode}, user_modifiertime=#{userModifiertime},user_oldecustomerno=#{userOldecustomerno} WHERE user_customerno = #{userCustomerno};
     </update>
 
     <select id="selectUserInfo" resultMap="UserMap">

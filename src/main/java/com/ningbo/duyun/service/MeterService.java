@@ -275,7 +275,9 @@ public class MeterService {
                 importInfoType .setType(type);//type值为
                 importInfoType .setUserCustomerno(faildItem.getCardId());//用户编号
                 importInfoType .setReason(faildItem.getErrorCode());//设置错误代码
+                importInfoType.setMeterCurrentreading(Integer.toString(faildItem.getReading()));//设置读数
                 importInfoType .setCreateTime(new Date());
+                importInfoType.setMeterMetercode(faildItem.getBarCode());//水表号
                 importInfoType .setMeterReadTime(faildItem.getReadDate().split("T")[0]);
                 importInfoService.insertImportInfo(importInfoType);
             }
