@@ -44,7 +44,7 @@
                 <input type="text" id="endTime" name="layui-input"  placeholder="结束时间" class="form-control"  style="color: black">
             </div>
             <button id="insertWaterReadingBtn" class="btn btn-lg btn-success btn-block" type="button">插入中间库数据</button>
-          <!--  <button id>获取本期小于上期读数加一再传</button>-->
+            <button id="uploadCurrentLessThanPeriodBtn" class="btn btn-lg btn-danger" type="button">获取本期小于上期读数加一再传</button>
 
             <div id="loading" style="display: none;margin-top: 35px"><img src="lib/11.gif" height="15" width="295"/>
                 <p style="text-align: center">正在上传，请稍等</p></div>
@@ -191,10 +191,10 @@
 
                             $("#loading").hide();
                             $("#insertWaterReadingBtn").show();
-                            alert("插入用户成功!使用" + data.useTime+"分钟");
+                            alert("插入读数成功!使用" + data.useTime+"分钟");
 
                         } else {
-                            alert("插入用户失败！使用" + data.useTime+"分钟");
+                            alert("插入读数失败！使用" + data.useTime+"分钟");
                             $("#loading").hide();
                             $("#insertWaterReadingBtn").show();
                         }
@@ -220,9 +220,10 @@
         if(!userFlag)
         {
            $.ajax({url:"/uploadReading",success:function (data,status) {
+                 debugger
                    if (status =="success")
                    {
-                       alert("成功！");
+                       alert("本期小于上期："+data.CurrentLessThanPeriod+"\n不存在可以修改的数据："+data.NotExitsModifier+"\n其他异常："+data.Other);
                    }
                    else
                    {
@@ -236,6 +237,29 @@
             alert("正在上传用户，请乎操作！");
         }
 
+    })
+
+    $("#uploadCurrentLessThanPeriodBtn").click(function () {
+        $.ajax({url:"/uploadCurrentLessThanPeriod",success:function (data,status) {
+            debugger
+                if (status =="success")
+                {
+                    if(data)
+                    {
+                        alert("请求成功！");
+                    }
+                    else
+                    {
+                        alert("请求失败！");
+                    }
+
+                }
+                else
+                {
+                    alert("请求异常")
+                }
+            }
+        });
     })
 
 </script>

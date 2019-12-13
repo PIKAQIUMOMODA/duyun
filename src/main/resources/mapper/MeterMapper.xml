@@ -103,7 +103,7 @@ SELECT
 	 `user`.user_customerno AS cardId,
 	 "" AS barCode,
 	 "" AS serialNo,
-	floor(21) AS reading,
+	floor(tmpmeter.meter_currentreading) AS reading,
 	"" AS water,
 	"正常" AS readState,
 	 CEILING(UNIX_TIMESTAMP(tmpmeter.meter_readTime)*1000) AS readDate,
@@ -129,7 +129,8 @@ INNER JOIN (
 	) AS tmp ON meter.meter_metercode = tmp.meter_metercode
 	AND meter.meter_readTime = tmp.meter_readTime
 ) AS tmpmeter ON `user`.user_metercode = tmpmeter.meter_metercode  where `user`.user_customerno in (
-010923313
+02019011501193,
+02019011501349
 )
 
 

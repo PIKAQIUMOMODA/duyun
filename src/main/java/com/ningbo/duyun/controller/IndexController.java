@@ -82,16 +82,21 @@ public class IndexController {
      */
     @GetMapping("/uploadReading")
     @ResponseBody
-    public  Map<String,Integer> uploadReading() {
+    public  Map<String,Integer> uploadReading() throws Exception {
          Map<String,Integer>  model=new HashMap<String, Integer>();
          try {
-             Map<String, Object> result = meterService.uploadRemoteData();
+         Map<String, Object> result =meterService.uploadRemoteData();
              model.put("CurrentLessThanPeriod", Integer.valueOf(result.get("CurrentLessThanPeriod").toString()));
-             model.put("CurrentLessThanPeriod", Integer.valueOf(result.get("CurrentLessThanPeriod").toString()));
-             model.put("CurrentLessThanPeriod", Integer.valueOf(result.get("CurrentLessThanPeriod").toString()));
+             model.put("NotExitsModifier", Integer.valueOf(result.get("NotExitsModifier").toString()));
+             model.put("Other", Integer.valueOf(result.get("Other").toString()));
+
+//             model.put("CurrentLessThanPeriod",1);
+//             model.put("NotExitsModifier", 1);
+//             model.put("Other",1);
          }catch (Exception e)
          {
              logger.error("上传读数出错"+e.getMessage());
+             throw new Exception("上传读数出错"+e.getMessage());
          }
         return model;
     }
@@ -144,6 +149,16 @@ public class IndexController {
            map.put("result",3);
        }
         return map;
+    }
+
+
+    @GetMapping("/uploadCurrentLessThanPeriod")
+    @ResponseBody
+    public boolean uploadCurrentLessThanPeriod()
+    {
+
+        return meterService.uploadCurrentLessThanPeriod();
+
     }
 
     @GetMapping("index")

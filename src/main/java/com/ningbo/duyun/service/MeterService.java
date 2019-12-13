@@ -11,6 +11,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 
 import java.text.SimpleDateFormat;
@@ -207,33 +209,7 @@ public class MeterService {
 
 
 
-         //获取本期小于上期的数据读数加1重新传输
-//        logger.info("------------------------------------");
-//        logger.info(faildItemCurrentLessThanPeriod.toString());
-//        List<RemoteData> faildRemoteData=new ArrayList<RemoteData>();
-//        for (int i=0;i<faildItemCurrentLessThanPeriod.size();i++)
-//        {
-//                 FaildItem faildItem=faildItemCurrentLessThanPeriod.get(i);
-//                 RemoteData remoteData=new RemoteData();
-//                 remoteData.setBarCode("");
-//                 remoteData.setCardId(faildItem.getCardId());
-//                 remoteData.setReading(faildItem.getReading()+1);
-//                 remoteData.setReadState("正常");
-//                 remoteData.setSerialNo("");
-//                 remoteData.setReadDate(System.currentTimeMillis());
-//                 remoteData.setWater(0);
-//                 faildRemoteData.add(remoteData);
-//
-//        }
-//        RemoteRecord remoteRecord1=new RemoteRecord();
-//        remoteRecord1.setUserId(225);
-//        remoteRecord1.setDeviceId("NB");
-//        remoteRecord1.setRecords(faildRemoteData);
-//        String json=JSON.toJSONString(remoteRecord1);
-//        String responseJson= DuyunHttpUtil.doPost(duyunUrl,json);
-//         logger.info("------------------------------------");
-//         logger.info(responseJson);
-//         logger.info(json);
+
         return result;
     }
 
@@ -334,5 +310,45 @@ public class MeterService {
         {
             logger.info(e.getMessage());
         }
+    }
+
+
+    public boolean uploadCurrentLessThanPeriod()
+    {
+        //获取本期小于上期的数据读数加1重新传输
+        logger.info("------------------------------------");
+        try{
+            List<FaildItem> faildItemCurrentLessThanPeriod=importInfoService.getFaildItemList();
+            List<RemoteData> faildRemoteData=new ArrayList<RemoteData>();
+            for (int i=0;i<faildItemCurrentLessThanPeriod.size();i++)
+            {
+                FaildItem faildItem=faildItemCurrentLessThanPeriod.get(i);
+                RemoteData remoteData=new RemoteData();
+                remoteData.setBarCode("");
+                remoteData.setCardId(faildItem.getCardId());
+                remoteData.setReading(faildItem.getReading()+1);
+                remoteData.setReadState("正常");
+                remoteData.setSerialNo("");
+                long d=java.sql.Date.valueOf(faildItem.getReadDate()).getTime();
+                remoteData.setReadDate(d);
+                remoteData.setWater(0);
+                faildRemoteData.add(remoteData);
+
+            }
+            RemoteRecord remoteRecord1=new RemoteRecord();
+            remoteRecord1.setUserId(225);
+            remoteRecord1.setDeviceId("NB");
+            remoteRecord1.setRecords(faildRemoteData);
+            String json=JSON.toJSONString(remoteRecord1);
+            logger.info(json);
+
+        }catch (Exception e)
+        {
+            logger.error("上传数据错误"+e.getMessage());
+            return false;
+        }
+
+        logger.info("------------------------------------");
+        return true;
     }
 }
